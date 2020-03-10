@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="12sp"
+        android:text="@string/option_symbology"
+        android:textColor="@color/label_caption" />
+    
+    <ListView android:id="@+id/symbol_list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/border" />
+    
+    <View android:layout_width="wrap_content" android:layout_height="10dp" />
+    
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
+	    android:gravity="center_vertical" >
+	    
+	    <Button android:id="@+id/set_enable_status"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/set_enable_status" />
+	    
+	    <Button android:id="@+id/default_all_symbologies"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/default_all_symbologies" />
+	    
+	    <Button android:id="@+id/disable_all_symbologies"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/disable_all_symbologies" />
+	    
+	    <Button android:id="@+id/enable_all_symbologies"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/enable_all_symbologies" />
+	    
+	    <Button android:id="@+id/gerneral_config"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/gerneral_config" />
+	    	    	    	    	    
+	</LinearLayout>
+	
+</LinearLayout>

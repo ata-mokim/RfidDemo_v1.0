@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+        
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp" 
+            android:paddingLeft="5dp">
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/postal_codes_2d"
+                android:textColor="@color/label_caption" />
+            
+            <TableRow android:gravity="center_vertical" >
+            	
+                <Spinner android:id="@+id/postal_codes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                
+            </TableRow>
+            
+            <View android:layout_width="fill_parent" android:layout_height="30dp" />
+            
+            <TableRow android:gravity="center_vertical" >
+                
+                <CheckBox android:id="@+id/planet_check_digit_transmit"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:textSize="14sp"
+	                android:text="@string/planet_check_digit_transmit"
+	                android:textColor="@color/label_caption"/>
+                
+            </TableRow>
+            
+            <TableRow android:gravity="center_vertical" >
+                
+                <CheckBox android:id="@+id/postnet_check_digit_transmit"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:textSize="14sp"
+	                android:text="@string/postnet_check_digit_transmit"
+	                android:textColor="@color/label_caption"/>
+                
+            </TableRow>
+            
+            <View android:layout_width="fill_parent" android:layout_height="30dp" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/aus_post_interpretation"
+                android:textColor="@color/label_caption" />
+            
+            <TableRow android:gravity="center_vertical" >
+            	
+                <Spinner android:id="@+id/aus_post_interpretation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                
+            </TableRow>
+            
+        </TableLayout>
+        
+    </ScrollView>
+	
+	<View android:layout_width="fill_parent" android:layout_height="10dp"/>
+    	
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+    				
+		<Button android:id="@+id/set_option"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:textSize="16sp"
+		    android:text="@string/set_option"/>
+        
+    </LinearLayout>
+
+</LinearLayout>

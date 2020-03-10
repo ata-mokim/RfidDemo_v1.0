@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: __local_aars__:C./ATA_android/wsmrbarcodedemo/libs/wsmr.system.jcomm_v1.19.2019010400.aar:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/94ae7e91c899c5dc20b32ed55bbb4683/wsmr.system.jcomm_v1.19.2019010400/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/94ae7e91c899c5dc20b32ed55bbb4683/wsmr.system.jcomm_v1.19.2019010400/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

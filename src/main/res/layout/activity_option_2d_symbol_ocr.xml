@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="5dp" >
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical" >
+                
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:text="@string/ocr_type"
+                    android:textColor="@color/label_color" />
+                
+                <Spinner android:id="@+id/ocr_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true"
+                android:gravity="center_vertical" >
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="@string/ocr_template"
+                    android:textColor="@color/label_color" />
+			
+				<EditText 
+					android:id="@+id/ocr_template"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+			        android:inputType="textCapCharacters"
+				    android:privateImeOptions="defaultInputmode=english"
+					android:enabled="false" />
+                
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true"
+                android:gravity="center_vertical" >
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="@string/user_defined_variable_g"
+                    android:textColor="@color/label_color" />
+			
+				<EditText 
+					android:id="@+id/user_defined_variable_g"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+			        android:inputType="textCapCharacters"
+				    android:privateImeOptions="defaultInputmode=english"
+					android:enabled="false" />
+                
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true"
+                android:gravity="center_vertical" >
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="@string/user_defined_variable_h"
+                    android:textColor="@color/label_color" />
+			
+				<EditText 
+					android:id="@+id/user_defined_variable_h"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+			        android:inputType="textCapCharacters"
+				    android:privateImeOptions="defaultInputmode=english"
+					android:enabled="false" />
+                
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true"
+                android:gravity="center_vertical" >
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="@string/check_character"
+                    android:textColor="@color/label_color" />
+			
+				<EditText 
+					android:id="@+id/check_character"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+			        android:inputType="textCapCharacters"
+				    android:privateImeOptions="defaultInputmode=english"
+					android:enabled="false" />
+                
+            </LinearLayout>
+            
+        </LinearLayout>
+        
+    </ScrollView>
+	
+	<View android:layout_width="fill_parent" android:layout_height="10dp"/>
+    	
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+    				
+		<Button android:id="@+id/set_option"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:textSize="16sp"
+		    android:text="@string/set_option"/>
+        
+    </LinearLayout>
+
+</LinearLayout>

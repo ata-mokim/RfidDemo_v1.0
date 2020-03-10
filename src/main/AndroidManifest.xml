@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.wsmr.app.barcode"
+    android:versionCode="2020022600"
+    android:versionName="3.01.2020022600">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!---<uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/alienlogo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.wsmr.app.barcode.MenuActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.MainRfidActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.wsmr.app.barcode.MainBarcodeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.wsmr.app.barcode.view.InventoryActivity"
+            android:icon="@drawable/ic_inventory"
+            android:label="@string/inventory_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.view.ReadMemoryActivity"
+            android:icon="@drawable/ic_read"
+            android:label="@string/read_memory_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.view.WriteMemoryActivity"
+            android:icon="@drawable/ic_write"
+            android:label="@string/write_memory_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.view.LockMemoryActivity"
+            android:icon="@drawable/ic_lock"
+            android:label="@string/lock_memory_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.view.OptionActivity"
+            android:icon="@drawable/ic_option"
+            android:label="@string/option_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.view.SelectionMask6cActivity"
+            android:label="@string/mask_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionActivitySE955"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionEnableStateActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/state_symbologies_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionGeneralConfigActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/general_config_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolUpcEanActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_upc_ean_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolCode39Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_code39_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolCode93Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_code93_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolCode11Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_code11_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolI2of5Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_interleaved2of5_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolD2of5Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_discete2of5_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolCodabarActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_codabar_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE955.OptionSymbolMsiActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/symbol_msi_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionActivityIT5x80"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionEnableStateActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/state_symbologies_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionSymbolAddenda"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionSymbolCheckDigit"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionSymbolComplexLength"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionSymbolLength"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionSymbolOCR"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.IT5x80.OptionGeneralConfigActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/general_config_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionActivitySE4710"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.MDI3x00.OptionActivityMDI3x00"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionEnableStateActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionGeneralConfigActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolCodabarActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolCode11Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolCode39Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolCode93Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolD2of5Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolI2of5Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolMsiActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolUpcEanActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolOptionCheck"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolCode128Activity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolPostalCodeActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.SE4710.OptionSymbolRssActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.MDI3x00.OptionEnableStateActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.wsmr.app.barcode.option.MDI3x00.OptionGeneralConfigActivity"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/barcode_option_name"
+            android:screenOrientation="portrait"></activity>
+    </application>
+
+</manifest>
