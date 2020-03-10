@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:background="@color/selection_background"
         android:orientation="vertical" >
-        
+
 	    <TextView android:id="@+id/selection"
 	        style="@style/Widget.View.SelectMaskTextView"
 	        android:layout_width="match_parent"
