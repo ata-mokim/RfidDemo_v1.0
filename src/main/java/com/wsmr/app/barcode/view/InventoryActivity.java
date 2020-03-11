@@ -115,6 +115,8 @@ public class InventoryActivity extends ActionActivity implements OnCheckedChange
         m_timeFlag=0;
         m_timeSec=1;
         m_tagTpsCount=0;
+
+
     }
 
     // ------------------------------------------------------------------------

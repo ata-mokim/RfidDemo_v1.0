@@ -8,7 +8,7 @@ public class GlobalInfo {
 
     private static TagType smTagType = TagType.Tag6C;
     private static boolean smIsDisplayPc = true;
-    private static boolean smIsContinuousMode = false;
+    private static boolean smIsContinuousMode = true;
     private static boolean smIsAsciiMode = false;
     private static int smLogLevel = 0;
 

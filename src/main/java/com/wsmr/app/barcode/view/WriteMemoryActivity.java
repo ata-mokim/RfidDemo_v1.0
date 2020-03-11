@@ -1395,12 +1395,12 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         if (mReader.getAction() == ActionState.Stop) {
             txtWriteValue_Hex.setEnabled(enabled);
             txtWriteValue_Ascii.setEnabled(enabled);
-            btnActionHex.setText(R.string.actionhex_write);
+            btnActionHex.setText(R.string.action_write);
             btnActionAscii.setText(R.string.actionascii_write);
         } else {
             txtWriteValue_Hex.setEnabled(false);
             txtWriteValue_Ascii.setEnabled(false);
-            btnActionHex.setText(R.string.actionhex_stop);
+            btnActionHex.setText(R.string.action_stop);
             btnActionAscii.setText(R.string.actionascii_stop);
         }
         btnActionHex.setEnabled(enabled);

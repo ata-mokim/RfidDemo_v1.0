@@ -130,6 +130,11 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Clear Activity
+        try {
+            mPowerRange = mReader.getPowerRange();
+        } catch (ATRfidReaderException e) {
+            ATLog.e(TAG, e, "ERROR. initReader() - Failed to get power range");
+        }
         clear();
     }
 
@@ -192,8 +197,7 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
         switch (v.getId()) {
             case R.id.power_gain:
                 ATLog.i(TAG, "INFO. onClick(power_gain)");
-                CommonDialog.showPowerGainDialog(this, R.string.power_gain, getPowerLevel(), mPowerRange,
-                        mPowerGainListener);
+                CommonDialog.showPowerGainDialog(this, R.string.power_gain, getPowerLevel(), mPowerRange,     mPowerGainListener);
 
                 break;
             case R.id.operation_time:

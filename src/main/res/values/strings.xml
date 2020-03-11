@@ -236,7 +236,7 @@
     <string name="action_clear">Clear</string>
     <string name="action_mask">Mask</string>
     <string name="action_read">Read</string>
-    <string name="action_write">Write(Hex)</string>
+    <string name="action_write">Write</string>
     <string name="actionhex_write">Write(Hex)</string>
     <string name="actionascii_write">Write(Ascii)</string>
     <string name="action_lock">Lock</string>

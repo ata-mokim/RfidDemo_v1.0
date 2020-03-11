@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,10 +36,13 @@ public class CommonDialog {
 
     public static final int DIALOG_CANCELED = -1;
 
-    public static void showPowerGainDialog(Context context, int title, final int value, RangeValue range,
-                                           final IPowerGainDialogListener listener) {
+    public static void showPowerGainDialog(Context context, int title, final int value, RangeValue range,  final IPowerGainDialogListener listener) {
 
         List<String> powerGains = new ArrayList<String>();
+
+        Log.e("##############",   ":"   + String.format( "| %d , %d ",  range.getMax() , range.getMin() ) );
+
+
         for (int i = range.getMax(), count = 0; i >= range.getMin() && count < MAX_POWER_GAIN_COUNT; i -= 10, count++) {
             powerGains.add(String.format(Locale.US, "%.1f dBm", i / 10.0F));
         }
