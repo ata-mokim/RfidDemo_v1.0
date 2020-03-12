@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class WriteMemoryActivity extends ReadWriteMemoryActivity {
@@ -317,7 +318,14 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
             //textView_epc[0].setText(epc.substring(j, k));
 
             for (int i = 0; i < spinnerIndex + 5 ; i++ ) {
-                textView_epc[i].setText(tag.substring(j, k));
+                //textView_epc[i].setText(tag.substring(j, k));
+
+                if (radioButton_Hex.isChecked()){
+                    textView_epc[i].setText(tag.substring(j, k)  );
+                }else if(radioButton_Ascii.isChecked()){
+                    textView_epc[i].setText( getHexToString ( tag.substring(j, k)) );
+                }
+
                 j = j + 4;
                 k = k + 4;
             }
@@ -365,6 +373,26 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
         return result;
     }
+
+    public static String getHexToString(String hex)
+    {
+        byte[] bytes = hexStringToByteArray(hex) ;
+        String st = new String(bytes, StandardCharsets.UTF_8);
+
+        return st;
+    }
+
+    public static byte[] hexStringToByteArray(String hex) {
+        int l = hex.length();
+        byte[] data = new byte[l/2];
+        for (int i = 0; i < l; i += 2) {
+            data[i/2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i+1), 16));
+        }
+        return data;
+    }
+
+
     public boolean setEpc(int position)
     {
         for (int i = 0 ; i < 5 + position ; i++)
@@ -518,11 +546,31 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if(checkedId == R.id.radioButton_Ascii){
+
+                    /*
+                    if (asciiFlag == false) {
+                        for (int i = 0 ; i < 5+spinnerIndex ; i++)
+                        {
+                            if (!"".equals(textView_epc[i].getText().toString().trim() ))
+                                textView_epc[i].setText(getHexToString(textView_epc[i].getText().toString().trim())) ;
+                        }
+                    }*/
+
                     asciiFlag = true;
+
+
                 }else{
+                    /*
+                    if (asciiFlag == true) {
+                        for (int i = 0 ; i < 5+spinnerIndex ; i++)
+                        {
+                            if (!"".equals(textView_epc[i].getText().toString().trim() ))
+                                textView_epc[i].setText(getStringToHex(textView_epc[i].getText().toString().trim())) ;
+                        }
+                    }*/
+
                     asciiFlag = false;
                 }
-
             }
         });
 
