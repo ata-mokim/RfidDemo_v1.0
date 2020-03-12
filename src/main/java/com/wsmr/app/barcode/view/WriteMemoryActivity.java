@@ -1546,18 +1546,21 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         if (mReader.getAction() == ActionState.Stop) {
             txtWriteValue_Hex.setEnabled(enabled);
             txtWriteValue_Ascii.setEnabled(enabled);
+            actionRead.setEnabled(enabled);
             btnActionHex.setText(R.string.action_write);
+            actionRead.setText( "Read"   );
             btnActionAscii.setText(R.string.actionascii_write);
         } else {
             txtWriteValue_Hex.setEnabled(false);
+            actionRead.setEnabled(false);
             txtWriteValue_Ascii.setEnabled(false);
             btnActionHex.setText(R.string.action_stop);
+            actionRead.setText(R.string.action_stop);
             btnActionAscii.setText(R.string.actionascii_stop);
+
         }
         btnActionHex.setEnabled(enabled);
         btnActionAscii.setEnabled(enabled);
-
-
     }
 
     private String getmWriteValue_Hex() {
