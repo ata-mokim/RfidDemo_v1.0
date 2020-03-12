@@ -141,10 +141,6 @@ public class ReadMemoryActivity extends ReadWriteMemoryActivity {
             adpReadValue.setOffset(offset);
             adpReadValue.setValue(data);
         }
-
-
-
-
         ATLog.i(TAG, "EVENT. onReaderResult(%s, %s, [%s], [%s], %.2f, %.2f", code, action, epc, data, rssi, phase);
 
         //Set_IniFile();

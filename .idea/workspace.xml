@@ -21,18 +21,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/GlobalInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/GlobalInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/dialog/CommonDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/dialog/CommonDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/InventoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/InventoryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release/wsmrbarcodedemo-release.apk" beforeDir="false" afterPath="$PROJECT_DIR$/release/wsmrbarcodedemo-release.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/ReadMemoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/ReadMemoryActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/WriteMemoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/WriteMemoryActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/ActionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/ActionActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/AccessActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/AccessActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_write_memory.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_write_memory.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +66,7 @@
     <property name="ExportApk.SignV2" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../JsonTest" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -181,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583829385932</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="write 화면 수정한 버전">
+      <created>1583901714542</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1583901714542</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,6 +201,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
     <MESSAGE value="test2" />
-    <option name="LAST_COMMIT_MESSAGE" value="test2" />
+    <MESSAGE value="write 화면 수정한 버전" />
+    <option name="LAST_COMMIT_MESSAGE" value="write 화면 수정한 버전" />
   </component>
 </project>

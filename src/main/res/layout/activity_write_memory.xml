@@ -165,6 +165,8 @@
 
 				android:padding="3dp">
 
+
+
 				<EditText
 					android:id="@+id/textView_epc1"
 					style="@style/EditTextStyle"
@@ -712,6 +714,16 @@
         android:layout_height="wrap_content" >
         
         <TableRow >
+
+
+
+			<Button android:id="@+id/actionRead"
+				style="@style/Widget.View.Button"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/action_read"
+				/>
 
 			<Button
 				android:id="@+id/actionhex"

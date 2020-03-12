@@ -129,7 +129,7 @@ public abstract class AccessActivity extends ActionActivity {
         txtSelection.setText(mTag);
         showMessage("");
 
-        Log.e("############" , "CLEAR");
+
     }
 
     // Initialize Activity Widgets

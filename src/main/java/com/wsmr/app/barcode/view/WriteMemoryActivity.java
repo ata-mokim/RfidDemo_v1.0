@@ -24,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -83,6 +84,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     private TextView txtWriteValue_Ascii;
     private Button btnActionHex;
     private Button btnActionAscii;
+    private Button actionRead;
 
     private String mWriteValue_Hex;
     private String mWriteValue_Ascii;
@@ -105,6 +107,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     String data = "";
     TextView  txtSelection;
     TextView  txtMessage;
+    boolean readFlag = true ;
 
     public TextView getTxtWriteValue_Ascii() {
         return txtWriteValue_Ascii;
@@ -150,9 +153,64 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 ATLog.i(TAG, "INFO. onClick(write_button_ascii)");
                 startAction();
                 break;
+
+            case R.id.actionRead:
+                startReadAction();
+                break;
         }
     }
 
+
+    // Start Action
+    protected void startReadAction() {
+
+        readFlag = true ;
+        //꺼짐방지
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        ResultCode res;
+        BankType bank = getBank();
+        int offset = 1;
+        int length = spinnerIndex + 6;
+        String password = getPassword();
+
+        EpcMatchParam epc = getEpc();
+        TagType tagType = getTagType();
+
+        clear();
+        enableWidgets(false);
+
+        Log.e("#########  ",   "  spinnerIndex :"   + String.format( "| %d ",   spinnerIndex ));
+
+        if(tagType == TagType.Tag6C) { // word unit
+            if ((res = mReader.readMemory6c(bank, offset, length, password, epc)) != ResultCode.NoError) {
+                ATLog.e(TAG, "ERROR. startAction() - Failed to read memory 6C tag [%s]", res);
+                enableWidgets(true);
+                Log.e("#########  ",   "  res :"   + String.format( "| %s ",   res ));
+
+
+                return;
+            }
+        } else if(tagType == TagType.Tag6B){ // byte unit
+
+            ATRfid900MAReader MAReader = (ATRfid900MAReader)mReader;
+            offset *= 2;
+            length *= 2;
+            String mask = getSelection();
+
+            SelectionMask6b mask6b = new SelectionMask6b(0, mask, MaskMatchingType.Match);
+            if ((res = MAReader.readMemory6b(offset, length, mask6b)) != ResultCode.NoError) {
+                ATLog.e(TAG, "ERROR. startAction() - Failed to read memory 6B tag [%s]", res);
+                enableWidgets(true);
+                return;
+            }
+        } else {
+            Toast.makeText(this, R.string.not_supported, Toast.LENGTH_SHORT).show();
+            enableWidgets(true);
+        }
+
+        ATLog.i(TAG, "INFO. startAction()");
+    }
     // ------------------------------------------------------------------------
     // Reader Control Methods
     // ------------------------------------------------------------------------
@@ -161,13 +219,11 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     @Override
     protected void startAction() {
 
+        readFlag = false;
         //꺼짐방지
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-
         /* mino
-
             if (btnActionHex.isPressed()){
                 data = getmWriteValue_Hex();
             }else if(btnActionAscii.isPressed()){
@@ -246,17 +302,46 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
 
     @Override
-    public void onReaderResult(ATRfidReader reader, ResultCode code, ActionState action, String epc, String s1,
+    public void onReaderResult(ATRfidReader reader, ResultCode code, ActionState action, String tag, String epc,
                                float rssi, float phase) {
 
-        resultMessage(code);
-        setSelection(data);
-
-        Log.e("###########  ",   ":"   + String.format( "(%s, %s, [%s], [%s], %.2f, %.2f ",  code, action, epc, s1, rssi, phase  ) );
+        Log.e("###########  ",   ":"   + String.format( "(%s, %s, [%s], [%s], %.2f, %.2f ",  code, action, tag, epc, rssi, phase  ) );
         ATLog.i(TAG, "EVENT. onReaderResult(%s, %s, [%s], [%s], %.2f, %.2f", code, action, epc, data, rssi, phase);
+
+        resultMessage(code);
+        if (readFlag){
+            setSelection(tag);
+            int j  = 4;
+            int k = 8;
+
+            //textView_epc[0].setText(epc.substring(j, k));
+
+            for (int i = 0; i < spinnerIndex + 5 ; i++ ) {
+                textView_epc[i].setText(tag.substring(j, k));
+                j = j + 4;
+                k = k + 4;
+            }
+
+
+        }else {
+            setSelection(data);
+        }
+
 
         playSuccess();
     }
+
+
+    /*
+    @Override
+    public void onReaderReadTag(ATRfidReader reader, String tag, float rssi, float phase) {
+        playSuccess();
+
+        setSelection(data);
+        Log.e("#########  ",   "  res :"   + String.format( "| %s ",   tag ));
+
+        Log.e("###########  ",   ":111111111111 "  );
+    }*/
 
     // Clear Widgets
     @Override
@@ -378,6 +463,11 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         btnActionAscii = (Button) findViewById(R.id.actionascii);
         btnActionAscii.setOnClickListener(this);
 
+        // Initialize Action Button
+        actionRead = (Button) findViewById(R.id.actionRead);
+        actionRead.setOnClickListener(this);
+        actionRead.setEnabled(true);
+
 
         setBank(BankType.EPC);
         setOffset(2);
@@ -410,6 +500,12 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
         txtSelection = (TextView) findViewById(R.id.selection);
         txtMessage = (TextView) findViewById(R.id.message);
+
+
+
+
+
+
 
     }
 
@@ -690,6 +786,12 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                     i = 2;
 
                 if(textView_epc[0].length()==i){  // edit1  값의 제한값을 6이라고 가정했을때
+
+                    textView_epc[0].setPrivateImeOptions("defaultInputmode=numberic");
+                    textView_epc[1].setPrivateImeOptions("defaultInputmode=numberic");
+
+                    Log.e("#########  ",   " defaultInputmode :"   + String.format( "| %s ",  textView_epc[0].getPrivateImeOptions().toString() ));
+
                     textView_epc[1].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
@@ -806,6 +908,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                     i = 2;
 
                 if(textView_epc[3].length()==i){  // edit3  값의 제한값을 6이라고 가정했을때
+
                     textView_epc[4].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
@@ -1823,5 +1926,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
             return true ;
         }
+
+
 
     }
