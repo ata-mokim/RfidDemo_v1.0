@@ -126,9 +126,11 @@
 				android:orientation="horizontal"
 				android:padding="3dp">
 
+
 				<RadioGroup
 					android:id="@+id/radioGroup_Hex_Ascii"
-					android:layout_width="match_parent"
+					android:layout_width="0dp"
+					android:layout_weight="1"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal">
 
@@ -150,6 +152,19 @@
 						android:layout_weight="1"
 						android:text="Ascii" />
 				</RadioGroup>
+
+				<TextView
+					android:id="@+id/textView_bits"
+					style="@style/Widget.View.LabelTextView"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:layout_weight="1"
+					android:background="@drawable/border_black"
+					android:gravity="center_vertical|center"
+					android:textColor="@color/green"
+					android:textSize="18dp"
+					android:textStyle="bold"/>
 		</LinearLayout>>
 
 
@@ -166,7 +181,7 @@
 				android:padding="3dp">
 
 
-
+				<!--android:digits="0123456789abcdefABCDEF"-->
 				<EditText
 					android:id="@+id/textView_epc1"
 					style="@style/EditTextStyle"
@@ -175,11 +190,14 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"
+					/>
 
 				<EditText
 					android:id="@+id/textView_epc2"
@@ -189,11 +207,17 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"
+					/>
 
 				<EditText
 					android:id="@+id/textView_epc3"
@@ -203,11 +227,17 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"
+					/>
 
 
 				<EditText
@@ -218,11 +248,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true" />
 
 				<EditText
 					android:id="@+id/textView_epc5"
@@ -232,11 +267,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc6"
@@ -246,11 +286,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<View
 					android:layout_width="0dp"
@@ -273,11 +318,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc8"
@@ -287,11 +337,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc9"
@@ -301,11 +356,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 
 				<EditText
@@ -316,11 +376,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc11"
@@ -330,11 +395,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc12"
@@ -344,11 +414,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 				<View
 					android:layout_width="0dp"
 					android:layout_height="33dp" />
@@ -369,11 +444,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc14"
@@ -383,11 +463,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc15"
@@ -397,11 +482,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 
 				<EditText
@@ -412,11 +502,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc17"
@@ -426,11 +521,16 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
+
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+
+
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 
 				<EditText
 					android:id="@+id/textView_epc18"
@@ -440,11 +540,13 @@
 					android:layout_marginHorizontal="2dp"
 					android:layout_marginTop="2dp"
 					android:ems="10"
-					android:inputType="textPersonName"
 					android:text=""
 					android:textAlignment="center"
 					android:textColor="@color/black"
-					android:textSize="14dp" />
+					android:textSize="14dp"
+					android:inputType="textVisiblePassword"
+					android:privateImeOptions="defaultInputmode=english"
+					android:singleLine="true"/>
 				<View
 					android:layout_width="0dp"
 					android:layout_height="33dp" />
@@ -723,7 +825,7 @@
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:text="@string/action_read"
-				/>
+			 />
 
 			<Button
 				android:id="@+id/actionhex"
@@ -761,7 +863,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
                 android:text="@string/action_mask" />
 	        
         </TableRow>

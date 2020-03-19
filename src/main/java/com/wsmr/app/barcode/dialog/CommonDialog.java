@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import com.wsmr.app.barcode.R;
 import com.wsmr.app.rfid.filter.InputRangeFilter;
+import com.wsmr.lib.dev.rfid.exception.ATRfidReaderException;
 import com.wsmr.lib.dev.rfid.param.QValue;
 import com.wsmr.lib.dev.rfid.param.RangeValue;
 import com.wsmr.lib.dev.rfid.type.BankType;
@@ -40,7 +41,21 @@ public class CommonDialog {
 
         List<String> powerGains = new ArrayList<String>();
 
-        Log.e("##############",   ":"   + String.format( "| %d , %d ",  range.getMax() , range.getMin() ) );
+
+
+        if (range == null ) {
+
+            range  = new RangeValue();
+            range.max = 300;
+            range.min = 100;
+
+            Log.e("##############",   ": range IS NULL "   + String.format( "| %d , %d ",  range.getMax() , range.getMin() ) );
+        }else {
+
+            Log.e("##############", ": range NOT IS NULL " + String.format("| %d , %d ", range.getMax(), range.getMin()));
+        }
+
+
 
 
         for (int i = range.getMax(), count = 0; i >= range.getMin() && count < MAX_POWER_GAIN_COUNT; i -= 10, count++) {

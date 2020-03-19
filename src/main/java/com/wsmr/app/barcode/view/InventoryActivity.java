@@ -1,6 +1,11 @@
 package com.wsmr.app.barcode.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Locale;
+import java.util.Properties;
 
 import com.wsmr.app.barcode.GlobalInfo;
 import com.wsmr.app.barcode.R;
@@ -570,6 +575,13 @@ public class InventoryActivity extends ActionActivity implements OnCheckedChange
         ATLog.i(TAG, "INFO initReader()");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Set_IniFile();
+    }
+
     // Activated Reader
     @Override
     protected void activateReader() {
@@ -585,7 +597,7 @@ public class InventoryActivity extends ActionActivity implements OnCheckedChange
 
         enableWidgets(true);
 
-        ATLog.i(TAG, "INFO. activateReader()");
+        ATLog.e(TAG, "################ INFO. activateReader()");
     }
 
     // Update Tag
@@ -650,5 +662,38 @@ public class InventoryActivity extends ActionActivity implements OnCheckedChange
 //			}
         }
     };
+
+
+    private void Set_IniFile(){
+        File file = new File("/sdcard/RFIDParm.ini");
+        Properties prop = new Properties();
+
+        try {
+            prop.load(new FileInputStream(file));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+        TextView txtOperationTime = (TextView) findViewById(R.id.operation_time);
+
+        // Initialize Power Gain
+        TextView txtPower = (TextView) findViewById(R.id.power_gain);
+
+
+        String tOperationTime = (String)txtOperationTime.getText();
+        String[] words = tOperationTime.split(" ");
+        prop.setProperty("OperationTime",words[0]);
+
+        String tPower = (String)txtPower.getText();
+        String[] words3 = tPower.split(" ");
+        prop.setProperty("PowerGain",words3[0]);
+
+        try {
+            prop.store(new FileOutputStream(file),null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

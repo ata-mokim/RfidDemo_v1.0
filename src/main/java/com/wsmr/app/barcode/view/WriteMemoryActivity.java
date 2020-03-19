@@ -2,6 +2,7 @@ package com.wsmr.app.barcode.view;
 
 import com.wsmr.app.barcode.R;
 import com.wsmr.app.barcode.dialog.CommonDialog;
+import com.wsmr.app.barcode.util.StringUtil;
 import com.wsmr.app.barcode.view.base.ReadWriteMemoryActivity;
 import com.wsmr.lib.dev.ATRfidReader;
 import com.wsmr.lib.dev.rfid.ATRfid900MAReader;
@@ -24,14 +25,18 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -46,6 +51,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
@@ -83,6 +89,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
     private TextView txtWriteValue_Hex;
     private TextView txtWriteValue_Ascii;
+    private TextView textView_bits;
     private Button btnActionHex;
     private Button btnActionAscii;
     private Button actionRead;
@@ -95,7 +102,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     Spinner spinner;
     String[] arrayPc   = {"2800", "3000", "3800", "4000","4800","5000","5800" , "6000","6800", "7000",  "7800", "8000",  "8800",   "9000" };
     String[] bits      = {"80bit", "96bit", "112bit" , "128bit", "144bit", "160bit", "176bit", "192bit", "208bit", "224bit", "240bit", "256bit", "272bit", "288bit"  };
-    private TextView textView_epc[] = new TextView[18];
+    public  EditText editText_epc[] = new EditText[18];
     String epc[] = new String[18];
     String pc = "";
     private int spinnerIndex;
@@ -109,6 +116,8 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     TextView  txtSelection;
     TextView  txtMessage;
     boolean readFlag = true ;
+    StringUtil stringUtil = new StringUtil();
+    public static  InputFilter[] defaultFilter;
 
     public TextView getTxtWriteValue_Ascii() {
         return txtWriteValue_Ascii;
@@ -137,6 +146,104 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
         Set_IniFile();
     }
+    // ------------------------------------------------------------------------
+    // Override Widgets Control Methods
+    // ------------------------------------------------------------------------
+
+    // Initialize Activity Widgets
+    @Override
+    protected void initWidgets() {
+
+        //꺼짐방지
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        super.initWidgets();
+
+        // Initialize Write Data EditText
+        txtWriteValue_Hex = (TextView) findViewById(R.id.write_value_Hex);
+        txtWriteValue_Hex.setOnClickListener(this);
+        // Initialize Write Data EditText
+        txtWriteValue_Ascii = (TextView) findViewById(R.id.write_value_Ascii);
+        txtWriteValue_Ascii.setOnClickListener(this);
+
+        // Initialize Action Button
+        btnActionHex = (Button) findViewById(R.id.actionhex);
+        btnActionHex.setOnClickListener(this);
+        // Initialize Action Button
+        btnActionAscii = (Button) findViewById(R.id.actionascii);
+        btnActionAscii.setOnClickListener(this);
+
+        // Initialize Action Button
+        actionRead = (Button) findViewById(R.id.actionRead);
+        actionRead.setOnClickListener(this);
+
+
+        setBank(BankType.EPC);
+        setOffset(2);
+
+        // spinner 설정 ( combobox )
+        spinner     = findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this , R.layout.spinner_text, bits);
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        spinner.setAdapter(adapter);
+        //Load_IniFile();
+
+        // ViewBy Id
+        this.setViewById();
+        // epc text box 설정
+        for (int i = 0 ; i < epc.length ; i++)
+        {
+            epc[i] = "";
+            editText_epc[i].setText (epc[i]) ;
+        }
+        // epc text 에 focusChange 설정
+        this.setListener();
+        spinner.setSelection(1);
+
+        radioButton_Hex = findViewById(R.id.radioButton_Hex);
+        radioButton_Ascii = findViewById(R.id.radioButton_Ascii);
+
+        radioButton_Hex.setChecked(true);
+        pc = "3000";
+
+        txtSelection = (TextView) findViewById(R.id.selection);
+        txtMessage = (TextView) findViewById(R.id.message);
+
+        //editText_epc[0].setPrivateImeOptions("defaultInputmode=numberic");
+        //editText_epc[1].setPrivateImeOptions("defaultInputmode=numberic");
+
+        setFilter();
+
+    }
+
+    // Eanble Activity Widgets
+    @Override
+    protected void enableWidgets(boolean enabled) {
+        super.enableWidgets(enabled);
+
+        ATLog.e(TAG, "################ INFO. enableWidgets(%s)" , enabled );
+
+        if (mReader.getAction() == ActionState.Stop) {
+            txtWriteValue_Hex.setEnabled(enabled);
+            txtWriteValue_Ascii.setEnabled(enabled);
+            btnActionHex.setText(R.string.action_write);
+            actionRead.setText( R.string.action_read  );
+            btnActionAscii.setText(R.string.actionascii_write);
+            actionRead.setEnabled(enabled);
+        } else {
+            txtWriteValue_Hex.setEnabled(false);
+
+            txtWriteValue_Ascii.setEnabled(false);
+            btnActionHex.setText(R.string.action_stop);
+            actionRead.setText(R.string.action_stop);
+            btnActionAscii.setText(R.string.actionascii_stop);
+            actionRead.setEnabled(false);
+
+        }
+        btnActionHex.setEnabled(enabled);
+        btnActionAscii.setEnabled(enabled);
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -162,7 +269,13 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     }
 
 
-    // Start Action
+
+
+
+
+
+
+    // startReadAction  Action
     protected void startReadAction() {
 
         readFlag = true ;
@@ -247,7 +360,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         if (radioButton_Hex.isChecked()){
             data = pc + writeEpc ;
         }else if(radioButton_Ascii.isChecked()){
-            data = pc +  getStringToHex(writeEpc);
+            data = pc +  stringUtil.getStringToHex(writeEpc);
         }
         int offset = 1;
         // end
@@ -302,12 +415,13 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     }
 
 
+    // Action 끝난후
     @Override
     public void onReaderResult(ATRfidReader reader, ResultCode code, ActionState action, String tag, String epc,
                                float rssi, float phase) {
 
-        Log.e("###########  ",   ":"   + String.format( "(%s, %s, [%s], [%s], %.2f, %.2f ",  code, action, tag, epc, rssi, phase  ) );
-        ATLog.i(TAG, "EVENT. onReaderResult(%s, %s, [%s], [%s], %.2f, %.2f", code, action, epc, data, rssi, phase);
+        Log.e("###########  ",   ":"   + String.format( " onReaderResult (%s, %s, [%s], [%s], %.2f, %.2f , %s , %d ",  code, action, tag, epc, rssi, phase, readFlag  , spinnerIndex ) );
+
 
         resultMessage(code);
         if (readFlag){
@@ -315,15 +429,20 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
             int j  = 4;
             int k = 8;
 
-            //textView_epc[0].setText(epc.substring(j, k));
+            //editText_epc[0].setText(epc.substring(j, k));
+
+            //editText_epc[0].setFilters(defaultFilter);
 
             for (int i = 0; i < spinnerIndex + 5 ; i++ ) {
-                //textView_epc[i].setText(tag.substring(j, k));
+
+
+
+                Log.e("###########  ",   ":"   + String.format( " onReaderResult ( [%s] )",  tag.substring(j, k)  ));
 
                 if (radioButton_Hex.isChecked()){
-                    textView_epc[i].setText(tag.substring(j, k)  );
+                    editText_epc[i].setText(tag.substring(j, k)  );
                 }else if(radioButton_Ascii.isChecked()){
-                    textView_epc[i].setText( getHexToString ( tag.substring(j, k)) );
+                    editText_epc[i].setText( stringUtil.getHexToString ( tag.substring(j, k)) );
                 }
 
                 j = j + 4;
@@ -335,69 +454,25 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
             setSelection(data);
         }
 
-
         playSuccess();
     }
 
 
-    /*
-    @Override
-    public void onReaderReadTag(ATRfidReader reader, String tag, float rssi, float phase) {
-        playSuccess();
-
-        setSelection(data);
-        Log.e("#########  ",   "  res :"   + String.format( "| %s ",   tag ));
-
-        Log.e("###########  ",   ":111111111111 "  );
-    }*/
-
-    // Clear Widgets
-    @Override
-    protected void clear() {
-        super.clear();
-
-        for (int i = 0 ; i < epc.length ; i++)
-        {
-            epc[i] = "";
-            textView_epc[i].setText (epc[i]) ;
-        }
-    }
 
 
-    public static String getStringToHex(String s) {
-        String result = "";
 
-        for (int i = 0; i < s.length(); i++) {
-            result += String.format("%02X", (int) s.charAt(i));
-        }
 
-        return result;
-    }
 
-    public static String getHexToString(String hex)
-    {
-        byte[] bytes = hexStringToByteArray(hex) ;
-        String st = new String(bytes, StandardCharsets.UTF_8);
 
-        return st;
-    }
 
-    public static byte[] hexStringToByteArray(String hex) {
-        int l = hex.length();
-        byte[] data = new byte[l/2];
-        for (int i = 0; i < l; i += 2) {
-            data[i/2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i+1), 16));
-        }
-        return data;
-    }
+
 
 
     public boolean setEpc(int position)
     {
         for (int i = 0 ; i < 5 + position ; i++)
         {
-            epc[i] = textView_epc[i].getText().toString().trim();
+            epc[i] = editText_epc[i].getText().toString().trim();
 
         }
 
@@ -443,7 +518,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
             }
         });
 
-        textView_epc[position].requestFocus();
+        editText_epc[position].requestFocus();
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -464,82 +539,11 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         dialog.show();
     }
 
-    // ------------------------------------------------------------------------
-    // Override Widgets Control Methods
-    // ------------------------------------------------------------------------
 
-    // Initialize Activity Widgets
-    @Override
-    protected void initWidgets() {
-
-        //꺼짐방지
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        super.initWidgets();
-
-        // Initialize Write Data EditText
-        txtWriteValue_Hex = (TextView) findViewById(R.id.write_value_Hex);
-        txtWriteValue_Hex.setOnClickListener(this);
-        // Initialize Write Data EditText
-        txtWriteValue_Ascii = (TextView) findViewById(R.id.write_value_Ascii);
-        txtWriteValue_Ascii.setOnClickListener(this);
-
-        // Initialize Action Button
-        btnActionHex = (Button) findViewById(R.id.actionhex);
-        btnActionHex.setOnClickListener(this);
-        // Initialize Action Button
-        btnActionAscii = (Button) findViewById(R.id.actionascii);
-        btnActionAscii.setOnClickListener(this);
-
-        // Initialize Action Button
-        actionRead = (Button) findViewById(R.id.actionRead);
-        actionRead.setOnClickListener(this);
-        actionRead.setEnabled(true);
-
-
-        setBank(BankType.EPC);
-        setOffset(2);
-
-
-        // spinner 설정 ( combobox )
-        spinner     = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this , R.layout.spinner_text, bits);
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        spinner.setAdapter(adapter);
-        //Load_IniFile();
-
-        // ViewBy Id
-        this.setViewById();
-        // epc text box 설정
-        for (int i = 0 ; i < epc.length ; i++)
-        {
-            epc[i] = "";
-            textView_epc[i].setText (epc[i]) ;
-        }
-        // epc text 에 focusChange 설정
-        this.setListener();
-        spinner.setSelection(1);
-
-        radioButton_Hex = findViewById(R.id.radioButton_Hex);
-        radioButton_Ascii = findViewById(R.id.radioButton_Ascii);
-
-        radioButton_Hex.setChecked(true);
-        pc = "3000";
-
-        txtSelection = (TextView) findViewById(R.id.selection);
-        txtMessage = (TextView) findViewById(R.id.message);
-
-
-
-
-
-
-
-    }
-
+    //////////////////////////////////////////////
+    // event  모음
     private void setListener()
     {
-
         // hex ascii 라디오 버튼 이벤트
         radioGroup_Hex_Ascii.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -547,230 +551,217 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
                 if(checkedId == R.id.radioButton_Ascii){
 
-                    /*
-                    if (asciiFlag == false) {
-                        for (int i = 0 ; i < 5+spinnerIndex ; i++)
-                        {
-                            if (!"".equals(textView_epc[i].getText().toString().trim() ))
-                                textView_epc[i].setText(getHexToString(textView_epc[i].getText().toString().trim())) ;
-                        }
-                    }*/
-
                     asciiFlag = true;
-
+                    setFilter();
+                    //setEditBoxMaxLength();
 
                 }else{
-                    /*
-                    if (asciiFlag == true) {
-                        for (int i = 0 ; i < 5+spinnerIndex ; i++)
-                        {
-                            if (!"".equals(textView_epc[i].getText().toString().trim() ))
-                                textView_epc[i].setText(getStringToHex(textView_epc[i].getText().toString().trim())) ;
-                        }
-                    }*/
 
                     asciiFlag = false;
+                    setFilter();
+
+                   // setEditBoxMaxLength();
                 }
             }
         });
 
 
         // epc text 포커스 시에 배경색 바꿈 START
-        textView_epc[0].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[0].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[0].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[0].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[0].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[0].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[1].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[1].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[1].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[1].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[1].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[1].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[2].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[2].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[2].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[2].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[2].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[2].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[3].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[3].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[3].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[3].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[3].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[3].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[4].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[4].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[4].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[4].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[4].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[4].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[5].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[5].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[5].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[5].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[5].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[5].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[6].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[6].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[6].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[6].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[6].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[6].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[7].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[7].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[7].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[7].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[7].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[7].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[8].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[8].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[8].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[8].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[8].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[8].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[9].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[9].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[9].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[9].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[9].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[9].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
 
-        textView_epc[10].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[10].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[10].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[10].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[10].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[10].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[11].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[11].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[11].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[11].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[11].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[11].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[12].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[12].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[12].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[12].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[12].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[12].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[13].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[13].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[13].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[13].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[13].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[13].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[14].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[14].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[14].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[14].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[14].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[14].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[15].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[15].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[15].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[15].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[15].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[15].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[16].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[16].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[16].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[16].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[16].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[16].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
 
-        textView_epc[17].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editText_epc[17].setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    textView_epc[17].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[17].setBackgroundResource(R.drawable.fource_text_style);
                 }else {
-                    textView_epc[17].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[17].setBackgroundResource(R.drawable.edit_text_style);
                 }
             }
         });
@@ -824,7 +815,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         } );
 
         // epc text 박스에 text 개수에 따라 다음 칸으로 이동
-        textView_epc[0].addTextChangedListener(new TextWatcher() {
+        editText_epc[0].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
             @Override
@@ -833,41 +824,30 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 if ( asciiFlag)
                     i = 2;
 
-                if(textView_epc[0].length()==i){  // edit1  값의 제한값을 6이라고 가정했을때
-
-                    textView_epc[0].setPrivateImeOptions("defaultInputmode=numberic");
-                    textView_epc[1].setPrivateImeOptions("defaultInputmode=numberic");
-
-                    Log.e("#########  ",   " defaultInputmode :"   + String.format( "| %s ",  textView_epc[0].getPrivateImeOptions().toString() ));
-
-                    textView_epc[1].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[0].length()==i){  // edit1  값의 제한값을 6이라고 가정했을때
+                    Log.e("#########  ",   " defaultInputmode :"   + String.format( "| %s ",  editText_epc[0].getPrivateImeOptions().toString() ));
+                    editText_epc[1].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
-
-                if(textView_epc[0].length()== i) {
-                    text = textView_epc[0].getText().toString();
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
                 /*
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
 
-                if(textView_epc[0].length()> i){
-                    textView_epc[0].setText(text);
+                if(editText_epc[0].length()== i) {
+                    text = editText_epc[0].getText().toString();
                 }*/
             }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
 
-        textView_epc[1].addTextChangedListener(new TextWatcher() {
+        editText_epc[1].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -876,37 +856,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[1].length()==i){  // edit1  값의 제한값을 6이라고 가정했을때
-                    textView_epc[2].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[1].length()==i){  // edit1  값의 제한값을 6이라고 가정했을때
+                    editText_epc[2].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[1].length()== i) {
-                    text = textView_epc[1].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[1].length()> i){
-                    textView_epc[1].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[2].addTextChangedListener(new TextWatcher() {
+        editText_epc[2].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -915,37 +880,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[2].length()==i){  // edit2  값의 제한값을 6이라고 가정했을때
-                    textView_epc[3].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[2].length()==i){  // edit2  값의 제한값을 6이라고 가정했을때
+                    editText_epc[3].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[2].length()== i) {
-                    text = textView_epc[2].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[2].length()> i){
-                    textView_epc[2].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[3].addTextChangedListener(new TextWatcher() {
+        editText_epc[3].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -954,38 +904,23 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
+                setbits();
+                if(editText_epc[3].length()==i){  // edit3  값의 제한값을 6이라고 가정했을때
 
-                if(textView_epc[3].length()==i){  // edit3  값의 제한값을 6이라고 가정했을때
-
-                    textView_epc[4].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                    editText_epc[4].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[3].length()== i) {
-                    text = textView_epc[3].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[3].length()> i){
-                    textView_epc[3].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[4].addTextChangedListener(new TextWatcher() {
+        editText_epc[4].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -994,37 +929,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[4].length()==i){  // edit4  값의 제한값을 6이라고 가정했을때
-                    textView_epc[5].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[4].length()==i){  // edit4  값의 제한값을 6이라고 가정했을때
+                    editText_epc[5].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[4].length()== i) {
-                    text = textView_epc[4].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[4].length()> i){
-                    textView_epc[4].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[5].addTextChangedListener(new TextWatcher() {
+        editText_epc[5].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1033,37 +953,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[5].length()==i){  // edit5  값의 제한값을 6이라고 가정했을때
-                    textView_epc[6].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[5].length()==i){  // edit5  값의 제한값을 6이라고 가정했을때
+                    editText_epc[6].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[5].length()== i) {
-                    text = textView_epc[5].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[5].length()> i){
-                    textView_epc[5].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[6].addTextChangedListener(new TextWatcher() {
+        editText_epc[6].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1072,37 +977,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[6].length()==i){  // edit6  값의 제한값을 6이라고 가정했을때
-                    textView_epc[7].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[6].length()==i){  // edit6  값의 제한값을 6이라고 가정했을때
+                    editText_epc[7].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[6].length()== i) {
-                    text = textView_epc[6].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[6].length()> i){
-                    textView_epc[6].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[7].addTextChangedListener(new TextWatcher() {
+        editText_epc[7].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1111,37 +1001,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[7].length()==i){  // edit7  값의 제한값을 7이라고 가정했을때
-                    textView_epc[8].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[7].length()==i){  // edit7  값의 제한값을 7이라고 가정했을때
+                    editText_epc[8].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[7].length()== i) {
-                    text = textView_epc[7].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[7].length()> i){
-                    textView_epc[7].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[8].addTextChangedListener(new TextWatcher() {
+        editText_epc[8].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1150,37 +1025,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[8].length()==i){  // edit8  값의 제한값을 8이라고 가정했을때
-                    textView_epc[9].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[8].length()==i){  // edit8  값의 제한값을 8이라고 가정했을때
+                    editText_epc[9].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[8].length()== i) {
-                    text = textView_epc[8].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[8].length()> i){
-                    textView_epc[8].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[9].addTextChangedListener(new TextWatcher() {
+        editText_epc[9].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1189,38 +1049,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[9].length()==i){  // edit9  값의 제한값을 9이라고 가정했을때
-                    textView_epc[10].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[9].length()==i){  // edit9  값의 제한값을 9이라고 가정했을때
+                    editText_epc[10].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[9].length()== i) {
-                    text = textView_epc[9].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-
-                if(textView_epc[9].length()> i){
-                    textView_epc[9].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[10].addTextChangedListener(new TextWatcher() {
+        editText_epc[10].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1229,38 +1073,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[10].length()==i){  // edit10  값의 제한값을 10이라고 가정했을때
-                    textView_epc[11].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[10].length()==i){  // edit10  값의 제한값을 10이라고 가정했을때
+                    editText_epc[11].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[10].length()== i) {
-                    text = textView_epc[10].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-
-                if(textView_epc[10].length()> i){
-                    textView_epc[10].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[11].addTextChangedListener(new TextWatcher() {
+        editText_epc[11].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1269,38 +1097,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[11].length()==i){  // edit11  값의 제한값을 11이라고 가정했을때
-                    textView_epc[12].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[11].length()==i){  // edit11  값의 제한값을 11이라고 가정했을때
+                    editText_epc[12].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[11].length()== i) {
-                    text = textView_epc[11].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-
-                if(textView_epc[11].length()> i){
-                    textView_epc[11].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[12].addTextChangedListener(new TextWatcher() {
+        editText_epc[12].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1309,38 +1121,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[12].length()==i){  // edit12  값의 제한값을 12이라고 가정했을때
-                    textView_epc[13].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[12].length()==i){  // edit12  값의 제한값을 12이라고 가정했을때
+                    editText_epc[13].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[12].length()== i) {
-                    text = textView_epc[12].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[12].length()> i){
-                    textView_epc[12].setText(text);
-                }
-
-
-                 */
             }
         });
 
-        textView_epc[13].addTextChangedListener(new TextWatcher() {
+        editText_epc[13].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1349,37 +1145,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[13].length()==i){  // edit13  값의 제한값을 13이라고 가정했을때
-                    textView_epc[14].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[13].length()==i){  // edit13  값의 제한값을 13이라고 가정했을때
+                    editText_epc[14].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[13].length()== i) {
-                    text = textView_epc[13].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[13].length()> i){
-                    textView_epc[13].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[14].addTextChangedListener(new TextWatcher() {
+        editText_epc[14].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1388,37 +1169,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[14].length()==i){  // edit14  값의 제한값을 14이라고 가정했을때
-                    textView_epc[15].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[14].length()==i){  // edit14  값의 제한값을 14이라고 가정했을때
+                    editText_epc[15].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[14].length()== i) {
-                    text = textView_epc[14].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[14].length()> i){
-                    textView_epc[14].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[15].addTextChangedListener(new TextWatcher() {
+        editText_epc[15].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1427,37 +1193,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[15].length()==i){  // edit15  값의 제한값을 15이라고 가정했을때
-                    textView_epc[16].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[15].length()==i){  // edit15  값의 제한값을 15이라고 가정했을때
+                    editText_epc[16].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[15].length()== i) {
-                    text = textView_epc[15].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[15].length()> i){
-                    textView_epc[15].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[16].addTextChangedListener(new TextWatcher() {
+        editText_epc[16].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1466,37 +1217,22 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[16].length()==i){  // edit16  값의 제한값을 16이라고 가정했을때
-                    textView_epc[17].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[16].length()==i){  // edit16  값의 제한값을 16이라고 가정했을때
+                    editText_epc[17].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[16].length()== i) {
-                    text = textView_epc[16].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[16].length()> i){
-                    textView_epc[16].setText(text);
-                }
-
-                 */
             }
         });
 
-        textView_epc[17].addTextChangedListener(new TextWatcher() {
+        editText_epc[17].addTextChangedListener(new TextWatcher() {
 
             public String text = "";
 
@@ -1505,63 +1241,25 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                 int i = 4;
                 if ( asciiFlag)
                     i = 2;
-
-                if(textView_epc[17].length()==i){  // edit17  값의 제한값을 17이라고 가정했을때
-                    //textView_epc[18].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
+                setbits();
+                if(editText_epc[17].length()==i){  // edit17  값의 제한값을 17이라고 가정했을때
+                    //editText_epc[18].requestFocus(); // 두번째EditText 로 포커스가 넘어가게 됩니다
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[17].length()== i) {
-                    text = textView_epc[17].getText().toString();
-                }
             }
             @Override
             public void afterTextChanged(Editable s) {
-                /*
-                int i = 4;
-                if ( asciiFlag)
-                    i = 2;
 
-                if(textView_epc[17].length()> i){
-                    textView_epc[17].setText(text);
-                }
-
-                 */
             }
         });
 
 
 
     }
-    // Eanble Activity Widgets
-    @Override
-    protected void enableWidgets(boolean enabled) {
-        super.enableWidgets(enabled);
 
-        if (mReader.getAction() == ActionState.Stop) {
-            txtWriteValue_Hex.setEnabled(enabled);
-            txtWriteValue_Ascii.setEnabled(enabled);
-            actionRead.setEnabled(enabled);
-            btnActionHex.setText(R.string.action_write);
-            actionRead.setText( "Read"   );
-            btnActionAscii.setText(R.string.actionascii_write);
-        } else {
-            txtWriteValue_Hex.setEnabled(false);
-            actionRead.setEnabled(false);
-            txtWriteValue_Ascii.setEnabled(false);
-            btnActionHex.setText(R.string.action_stop);
-            actionRead.setText(R.string.action_stop);
-            btnActionAscii.setText(R.string.actionascii_stop);
-
-        }
-        btnActionHex.setEnabled(enabled);
-        btnActionAscii.setEnabled(enabled);
-    }
 
     private String getmWriteValue_Hex() {
         return mWriteValue_Hex;
@@ -1609,6 +1307,9 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
     // ------------------------------------------------------------------------
 
     private void Load_IniFile() {
+
+        ATLog.e(TAG, "####### Load_IniFile ########## " );
+
         File file = new File("/sdcard/RFIDParm.ini");
         Properties prop = new Properties();
 
@@ -1722,7 +1423,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                     });
                     return;
                 }
-                ATLog.i(TAG, "INFO. saveOption() - [Power Level : %d]", mPowerLevel);
+                ATLog.e(TAG, "INFO. saveOption() - [Power Level : %d]", mPowerLevel);
 
                 // Set Operation Time
                 try {
@@ -1740,7 +1441,7 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
                     });
                     return;
                 }
-                ATLog.i(TAG, "INFO. saveOption() - [Operation Time : %d]", mOperationTime);
+                ATLog.e(TAG, "INFO. saveOption() - [Operation Time : %d]", mOperationTime);
 
 
                 runOnUiThread(new Runnable() {
@@ -1763,6 +1464,10 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
 
 
     private void Set_IniFile(){
+
+        ATLog.e(TAG, "####### Set_IniFile  ########## " );
+
+
         File file = new File("/sdcard/RFIDParm.ini");
         Properties prop = new Properties();
 
@@ -1803,133 +1508,133 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         switch (view.getId()) {
             case R.id.textView_epc1:
                 if (hasFocus) {
-                    textView_epc[0].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[0].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[0].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[0].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc2:
                 if (hasFocus) {
-                    textView_epc[1].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[1].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[1].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[1].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
             case R.id.textView_epc3:
                 if (hasFocus) {
-                    textView_epc[2].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[2].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[2].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[2].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
             case R.id.textView_epc4:
                 if (hasFocus) {
-                    textView_epc[3].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[3].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[3].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[3].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
             case R.id.textView_epc5:
                 if (hasFocus) {
-                    textView_epc[4].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[4].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[4].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[4].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
             case R.id.textView_epc6:
                 if (hasFocus) {
-                    textView_epc[5].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[5].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[5].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[5].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
             case R.id.textView_epc7:
                 if (hasFocus) {
-                    textView_epc[6].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[6].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[6].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[6].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc8:
                 if (hasFocus) {
-                    textView_epc[7].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[7].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[7].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[7].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc9:
                 if (hasFocus) {
-                    textView_epc[8].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[8].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[8].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[8].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc10:
                 if (hasFocus) {
-                    textView_epc[9].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[9].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[9].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[9].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc11:
                 if (hasFocus) {
-                    textView_epc[10].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[10].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[10].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[10].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc12:
                 if (hasFocus) {
-                    textView_epc[11].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[11].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[11].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[11].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc13:
                 if (hasFocus) {
-                    textView_epc[12].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[12].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[12].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[12].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc14:
                 if (hasFocus) {
-                    textView_epc[13].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[13].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[13].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[13].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc15:
                 if (hasFocus) {
-                    textView_epc[14].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[14].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[14].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[14].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc16:
                 if (hasFocus) {
-                    textView_epc[15].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[15].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[15].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[15].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc17:
                 if (hasFocus) {
-                    textView_epc[16].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[16].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[16].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[16].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
             case R.id.textView_epc18:
                 if (hasFocus) {
-                    textView_epc[17].setBackgroundResource(R.drawable.fource_text_style);
+                    editText_epc[17].setBackgroundResource(R.drawable.fource_text_style);
                 } else {
-                    textView_epc[17].setBackgroundResource(R.drawable.edit_text_style);
+                    editText_epc[17].setBackgroundResource(R.drawable.edit_text_style);
                 }
                 break;
 
@@ -1940,44 +1645,123 @@ public class WriteMemoryActivity extends ReadWriteMemoryActivity {
         private void setViewById()
         {
 
-            textView_epc[0]        =  findViewById(R.id.textView_epc1);
-            textView_epc[1]        =  findViewById(R.id.textView_epc2);
-            textView_epc[2]        =  findViewById(R.id.textView_epc3);
-            textView_epc[3]        =  findViewById(R.id.textView_epc4);
-            textView_epc[4]        =  findViewById(R.id.textView_epc5);
-            textView_epc[5]        =  findViewById(R.id.textView_epc6);
-            textView_epc[6]        =  findViewById(R.id.textView_epc7);
-            textView_epc[7]        =  findViewById(R.id.textView_epc8);
-            textView_epc[8]        =  findViewById(R.id.textView_epc9);
-            textView_epc[9]        =  findViewById(R.id.textView_epc10);
-            textView_epc[10]       =  findViewById(R.id.textView_epc11);
-            textView_epc[11]       =  findViewById(R.id.textView_epc12);
-            textView_epc[12]       =  findViewById(R.id.textView_epc13);
-            textView_epc[13]       =  findViewById(R.id.textView_epc14);
-            textView_epc[14]       =  findViewById(R.id.textView_epc15);
-            textView_epc[15]       =  findViewById(R.id.textView_epc16);
-            textView_epc[16]       =  findViewById(R.id.textView_epc17);
-            textView_epc[17]       =  findViewById(R.id.textView_epc18);
+            editText_epc[0]        =  findViewById(R.id.textView_epc1);
+            editText_epc[1]        =  findViewById(R.id.textView_epc2);
+            editText_epc[2]        =  findViewById(R.id.textView_epc3);
+            editText_epc[3]        =  findViewById(R.id.textView_epc4);
+            editText_epc[4]        =  findViewById(R.id.textView_epc5);
+            editText_epc[5]        =  findViewById(R.id.textView_epc6);
+            editText_epc[6]        =  findViewById(R.id.textView_epc7);
+            editText_epc[7]        =  findViewById(R.id.textView_epc8);
+            editText_epc[8]        =  findViewById(R.id.textView_epc9);
+            editText_epc[9]        =  findViewById(R.id.textView_epc10);
+            editText_epc[10]       =  findViewById(R.id.textView_epc11);
+            editText_epc[11]       =  findViewById(R.id.textView_epc12);
+            editText_epc[12]       =  findViewById(R.id.textView_epc13);
+            editText_epc[13]       =  findViewById(R.id.textView_epc14);
+            editText_epc[14]       =  findViewById(R.id.textView_epc15);
+            editText_epc[15]       =  findViewById(R.id.textView_epc16);
+            editText_epc[16]       =  findViewById(R.id.textView_epc17);
+            editText_epc[17]       =  findViewById(R.id.textView_epc18);
 
             radioGroup_Hex_Ascii = findViewById(R.id.radioGroup_Hex_Ascii);
-
+            textView_bits  = (TextView) findViewById(R.id.textView_bits );
         }
 
         public boolean setTextBoxVisible(int position, AdapterView<?> adapterView)
         {
             for (int i = 5 ; i < 5+position ; i++)
             {
-                textView_epc[i].setVisibility(adapterView.VISIBLE);
+                editText_epc[i].setVisibility(adapterView.VISIBLE);
             }
 
             for (int i = 5+position  ; i < epc.length ; i++)
             {
-                textView_epc[i].setVisibility(adapterView.INVISIBLE);
+                editText_epc[i].setVisibility(adapterView.INVISIBLE);
             }
 
             return true ;
         }
 
+        private void setbits()
+        {
+            int totalEpcLength = 0;
+
+            for (int i = 0; i< epc.length ; i++)
+            {
+                totalEpcLength = totalEpcLength + editText_epc[i].length();
+            }
+
+            Log.e("#########  ", "  setbits  :" + String.format("| %d , %s",  totalEpcLength , asciiFlag ));
+
+            if ( asciiFlag){
+                textView_bits.setText(String.format("%dBit", totalEpcLength * 8));
+            }else {
+
+                textView_bits.setText(String.format("%dBit", totalEpcLength * 4));
+            }
+        }
+
+        private void setEditBoxMaxLength() {
+            if (asciiFlag == true) {
+                for (int i = 0; i < epc.length; i++) {
+                    editText_epc[i].setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
+                }
+
+            } else {
+                for (int i = 0; i < epc.length; i++) {
+                    editText_epc[i].setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                }
+            }
+        }
+
+        // Clear Widgets
+        @Override
+        protected void clear() {
+            super.clear();
+            for (int i = 0 ; i < epc.length ; i++)
+            {
+                epc[i] = "";
+                editText_epc[i].setText (epc[i]) ;
+            }
+        }
+
+
+        protected void  setFilter() {
+            for (int i =0; i<epc.length ; i++) {
+
+                InputFilter[] filters =  (new InputFilter[]{
+                        new InputFilter() {
+                            public CharSequence filter(CharSequence src, int start,
+                                                       int end, Spanned dst, int dstart, int dend) {
+
+
+                                //ATLog.e(TAG , "##### EVENT. setFilter()1  (%s , %d, %d, )", src, start, end );
+
+                                if (src.equals("")) {
+                                    return src;
+                                }
+
+                                if (asciiFlag == true) {
+                                    if (src.toString().matches("^[0-9a-aA-Z]")) {
+                                        return src;
+                                    }
+                                }else {
+                                    if (src.toString().matches("^[0-9a-fA-F]")) {
+                                        return src;
+                                    }
+                                }
+
+                                //ATLog.e(TAG , "##### EVENT. setFilter()2  (%s , %d, %d, )", src, start, end );
+
+                                return src;
+                            }
+                        },
+                        new InputFilter.LengthFilter(4)
+                });
+                editText_epc[i].setFilters(filters);
+            }
+        }
 
 
     }

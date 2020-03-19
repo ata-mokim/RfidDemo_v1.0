@@ -136,12 +136,14 @@ public class ReadMemoryActivity extends ReadWriteMemoryActivity {
 
         if (code != ResultCode.NoError) {
             adpReadValue.clear();
+
         } else {
             int offset = getOffset();
             adpReadValue.setOffset(offset);
             adpReadValue.setValue(data);
+            playSuccess();
         }
-        ATLog.i(TAG, "EVENT. onReaderResult(%s, %s, [%s], [%s], %.2f, %.2f", code, action, epc, data, rssi, phase);
+        ATLog.e(TAG , "EVENT. onReaderResult(%s, %s, [%s], [%s], %.2f, %.2f", code, action, epc, data, rssi, phase);
 
         //Set_IniFile();
     }
@@ -163,11 +165,22 @@ public class ReadMemoryActivity extends ReadWriteMemoryActivity {
         int length = getLength();
         String password = getPassword();
 
-        EpcMatchParam epc = getEpc();
+
+
         TagType tagType = getTagType();
 
         clear();
         enableWidgets(false);
+
+
+        EpcMatchParam epc = getEpc();
+
+        /*
+        EpcMatchParam epc = new EpcMatchParam();
+        epc.setLength(2);
+        epc.setValue(2);
+        epc.setData("11112222");
+        epc.setMatch( MaskMatchingType.Match);*/
 
         if(tagType == TagType.Tag6C) { // word unit
             if ((res = mReader.readMemory6c(bank, offset, length, password, epc)) != ResultCode.NoError) {

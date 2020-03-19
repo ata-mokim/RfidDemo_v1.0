@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Skylark Project (V3.01.20200226_01)" />
+            android:text="Skylark Project (V3.01.20200318_01)" />
     </LinearLayout>
 
     <ImageView

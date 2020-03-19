@@ -256,9 +256,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.3"
-                android:background="@drawable/border"
+                android:background="@drawable/border_black"
                 android:gravity="center_vertical|center"
-                android:textColor="@color/tag_count_color"
+                android:textColor="@color/green"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -276,9 +276,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.3"
-                android:background="@drawable/border"
+                android:background="@drawable/border_black"
                 android:gravity="center_vertical|center"
-                android:textColor="@color/tag_count_color"
+                android:textColor="@color/green"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

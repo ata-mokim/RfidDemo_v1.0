@@ -11,6 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2feda381-66ba-4ae7-8700-a4e37a14d225" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/border_black.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wsmrbarcodedemo_editbox.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/gc.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -21,8 +27,33 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_ini4j_0_5_4_jar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_ini4j_0_5_4_jar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_dev_barcode_v1_22_2019010400_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_dev_barcode_v1_22_2019010400_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_dev_rfid_debug_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_dev_rfid_debug_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_system_comm_v1_15_2019010400_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_system_comm_v1_15_2019010400_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_system_ctrl_v1_16_2019010400_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_system_ctrl_v1_16_2019010400_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_system_device_v1_13_2018101800_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_system_device_v1_13_2018101800_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_system_jcomm_v1_19_2019010400_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_system_jcomm_v1_19_2019010400_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_libs_wsmr_util_v1_15_2018101800_aar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___C__ATA_android_wsmrbarcodedemo_editbox_libs_wsmr_util_v1_15_2018101800_aar_unspecified_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/release/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release/wsmrbarcodedemo-release.apk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/MainBarcodeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/MainBarcodeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/dialog/CommonDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/dialog/CommonDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/util/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/util/StringUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/InventoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/InventoryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/ReadMemoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/ReadMemoryActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/WriteMemoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/WriteMemoryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/ActionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wsmr/app/barcode/view/base/ActionActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/alientechback.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/alientechback.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_inventory.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_inventory.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_write_memory.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_write_memory.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsmrbarcodedemo.iml" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +61,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_5X_API_28" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="2d636a08" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -44,7 +75,7 @@
     </system>
   </component>
   <component name="GenerateSignedApkSettings">
-    <option name="KEY_STORE_PATH" value="C:\ATA_android\wsmrbarcodedemo\ata.jks" />
+    <option name="KEY_STORE_PATH" value="C:\ATA_android\wsmrbarcodedemo_editbox\ata.jks" />
     <option name="KEY_ALIAS" value="ata" />
     <option name="REMEMBER_PASSWORDS" value="true" />
     <option name="BUILD_TARGET_KEY" value="apk" />
@@ -55,14 +86,14 @@
   <component name="ProjectId" id="1YurnJRTb99HzwN4ZZ89L3YTxDm" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="ApkExportedModule" value="wsmrbarcodedemo" />
-    <property name="ExportApk.ApkPath" value="C:\ATA_android\wsmrbarcodedemo" />
+    <property name="ApkExportedModule" value="wsmrbarcodedemo_editbox" />
+    <property name="ExportApk.ApkPath" value="C:\ATA_android\wsmrbarcodedemo_editbox" />
     <property name="ExportApk.BuildVariants" value="release" />
     <property name="ExportApk.SignV1" value="true" />
     <property name="ExportApk.SignV2" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RfidDemo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Dal/RFIDTestApp" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -70,6 +101,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ATA_android\wsmrbarcodedemo_editbox\src\main\res\drawable-xxhdpi" />
       <recent name="C:\ATA_android\wsmrbarcodedemo\src\main\res\drawable-xhdpi" />
       <recent name="C:\ATA_android\wsmrbarcodedemo\src\main\res\layout" />
     </key>
@@ -86,7 +118,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Android App.wsmrbarcodedemo_editbox">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -96,6 +128,57 @@
     </configuration>
     <configuration name="wsmrbarcodedemo" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="wsmrbarcodedemo" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="wsmrbarcodedemo_editbox" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="wsmrbarcodedemo_editbox" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -192,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583980994277</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="continue mode 화면 수정한 버전">
+      <created>1583997036218</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1583997036218</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

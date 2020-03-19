@@ -2,7 +2,7 @@ package com.wsmr.app.barcode;
 
 /*
  * 1.00.2019070100 : Skylark Project Change.
-*/
+ */
 
 import com.wsmr.lib.dev.ATScanManager;
 import com.wsmr.lib.dev.ATScanner;
@@ -416,18 +416,26 @@ public class MainBarcodeActivity extends Activity implements Button.OnClickListe
 
     // Beep & Vibrate
     private void beep(boolean isSuccess) {
-        ATLog.d(TAG, "@@@@ DEBUG. Play beep....!!!!");
-        ATLog.d(TAG, "@@@@ _______ nermy 1");
+        Log.e(TAG, "@@@@ DEBUG. Play beep....!!!!");
+        Log.e(TAG, "@@@@ _______ nermy 1");
+        Log.e(TAG,   String.format(". beep(%s)", isSuccess  )   );
 
         try{
             if(isSuccess){
-                ModuleControl.playBeep(true);
+                SoundPlay mSound;
+                mSound = new SoundPlay(this);
+                mSound.playSuccess();
+
+                //ModuleControl.playBeep(true);
             }else{
                 ModuleControl.playBeep(false);
             }
         }catch(Exception e){
-            ATLog.e(TAG, e, "ERROR. beep(%s)", isSuccess);
+            Log.e(TAG,   String.format("ERROR. beep(%s)", isSuccess  )   );
         }
+        //playSuccess();
+
+
 
 /*
         try{

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/wsmrbarcodedemo.iml" filepath="$PROJECT_DIR$/wsmrbarcodedemo.iml" group="wsmrbarcodedemo" />
+      <module fileurl="file://$PROJECT_DIR$/wsmrbarcodedemo_editbox.iml" filepath="$PROJECT_DIR$/wsmrbarcodedemo_editbox.iml" group="wsmrbarcodedemo_editbox" />
     </modules>
   </component>
 </project>

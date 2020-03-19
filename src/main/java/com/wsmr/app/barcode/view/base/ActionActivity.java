@@ -76,6 +76,7 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
     private int mInventoryTime;
     private int mIdleTime;
     private int mPowerLevel;
+    private static  boolean enableWidgetsFlag = false;
 
     private String[] mFreqChanNames;
     private boolean[] mFreqChanUses;
@@ -130,11 +131,6 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Clear Activity
-        try {
-            mPowerRange = mReader.getPowerRange();
-        } catch (ATRfidReaderException e) {
-            ATLog.e(TAG, e, "ERROR. initReader() - Failed to get power range");
-        }
         clear();
     }
 
@@ -519,7 +515,7 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
         mQValue.setMinQ(Integer.parseInt(tempMinQ));
 
         tempPowerGain = prop.getProperty("PowerGain");
-        double f = Double.parseDouble(tempPowerGain) * 10;
+        final double f = Double.parseDouble(tempPowerGain) * 10;
         mPowerLevel = (int)f;
 
         tempSession =prop.getProperty("Session");
@@ -606,7 +602,13 @@ public abstract class ActionActivity extends ReaderActivity implements OnClickLi
                         // Set Operation Time
                         setOperationTime(mOperationTime);
 
-                        enableWidgets(true);
+
+                        enableWidgets(enableWidgetsFlag);
+
+                        if (enableWidgetsFlag==true)
+                            enableWidgetsFlag = false;
+                        else
+                            enableWidgetsFlag = true;
 
                     }
                 });
